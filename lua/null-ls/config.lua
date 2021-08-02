@@ -65,6 +65,13 @@ local register_filetypes = function(filetypes)
 end
 
 local register_source = function(source, filetypes)
+    if type(source) == "function" then
+        source = source()
+        if not source then
+            return
+        end
+    end
+
     local generator, name = source.generator, source.name
     filetypes = filetypes or source.filetypes
 

@@ -1,3 +1,5 @@
+local lsputil = require("lspconfig.util")
+
 local u = require("null-ls.utils")
 local c = require("null-ls.config")
 local s = require("null-ls.state")
@@ -251,6 +253,18 @@ M.make_builtin = function(opts)
     end
 
     return builtin
+end
+
+M.conditional = function(check_condition)
+    local utils = {
+        root_has_file = function(name)
+            return lsputil.path.exists(lsputil.path.join(vim.loop.cwd(), name))
+        end,
+    }
+
+    return function()
+        return check_condition(utils)
+    end
 end
 
 if _G._TEST then
